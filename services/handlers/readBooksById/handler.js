@@ -11,7 +11,8 @@ async function ReadBooksById(object) {
 
     try {
         const books = await client.query(`SELECT "Books".name, "Authors".name AS "author" FROM "Books"
-                            INNER JOIN "Authors" ON "Authors".id = "Books".author_id WHERE "Books".id = $1`, [ object.id ])
+                            LEFT JOIN "AuthorsBooks" ON "AuthorsBooks".book_id = "Books".id
+                            LEFT JOIN "Authors" ON "Authors".id = "AuthorsBooks".author_id WHERE "Books".id = $1`, [ object.id ])
 
         data.message = books.rows
         data.statusCode = 200
